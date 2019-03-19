@@ -1,0 +1,28 @@
+{% extends "template.html" %}
+{% block title %}
+ツイート画像を過去から遡る
+{% endblock %}
+{% block body %}
+<h1 id="get-image-title">ツイート画像を過去から遡る</h1>
+    <p id="get_counts">{{ get_counts }}</p>
+    <form class="form" action="/works/getimages" method="post">
+      <span id="mark">@</span><input class="rounded" id="input-id" type="text" name="id" autocomplete="off" placeholder="IDを入力してください">
+      <input class="rounded" id="count" type="text" name="count" autocomplete="off"><span>ページ遡る</span>
+      <button class="btn btn-primary" id="submit" type="submit" name="button">ツイート画像を取得する</button>
+    </form>
+    <div class="images-zone {{ display_gb }}">
+      <!--
+      {% for result in results %}
+        <img src={{ result[0] }} alt="画像">
+        <p>{{ result[1] }}</p>
+      {% endfor %}
+      -->
+      {% for url, text, time in results %}
+        <a class="images" href={{ url }} target="_blank">
+          <img src={{ url }} alt="画像">
+          <span class=texts><span class="times">{{ time }}</span>{{ text }}</span>
+        </a>
+      {% endfor %}
+      {{ error }}
+    </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "template.html" %}
+{% block title %}
+トップページ
+{% endblock %}
+{% block body %}
+<div class="blog-body mt-5 p-4 text-center border bg-dark">
+  <ul id="posts" class="list-group list-group-flush">
+    {% for entry in entries %}
+      <div class="card m-2">
+        <div class="card-body">
+          <h5 class="card-title">{{ entry.title }}</h5>
+          {% if entry.category == "" %}
+            <h6 class="card-subtitle mb-4">カテゴリ: 未分類</h6>
+          {% else %}
+            <h6 class="card-subtitle mb-4">カテゴリ: {{ entry.category }}</h6>
+          {% endif %}
+          <a class="card-link bg-info text-dark font-weight-bold px-5 py-2" href="{{ url_for('show_entry', id=entry.id) }}">続きを読む</a>
+        </div>
+      </div>
+    {% else %}
+      <span class="text-white">投稿がありません</span>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

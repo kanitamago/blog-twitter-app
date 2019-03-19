@@ -1,0 +1,63 @@
+{% extends 'template.html' %}
+{% block title %}
+{{ entry.title }}
+{% endblock %}
+{% block body %}
+<div class="m-2 bg-light clearfix">
+  <h2 class="mt-3 ml-2 p-3">{{ entry.title }}</h2>
+  <div class="card-text m-4">
+    <span>投稿日時 {{ entry.created_at }}</span>
+    {% if entry.update_at %}
+    <span class="mb-4">｜更新日時 {{ entry.update_at }}</span>
+    {% endif %}
+    <p class="my-4">
+    {{ entry.text }}
+    </p>
+  </div>
+  {% if session.logged_in %}
+  <div class="clearfix mr-3">
+    <div class="btn-group float-right">
+      <form action="{{ url_for('edit', id=entry.id) }}" method="get">
+        <button class="btn btn-secondary" type="submit" name="button">編集</button>
+      </form>
+    </div>
+    <div class="btn-group float-right">
+      <form action="{{ url_for('delete', id=entry.id) }}" method="post">
+        <button class="btn btn-danger" type="submit" name="button">削除</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+  {% for comment in comments %}
+    {% if comment.article_id == entry.id %}
+      <div class="card px-3 pt-3 m-3 ">
+        <p><strong>投稿者: </strong>{{ comment.name }}</p>
+        <div class="w-100 h-75 mb-2 p-3 border bg-light rounded">
+          <p><strong>コメント: </strong></p>
+          <p>{{ comment.text }}</p>
+        </div>
+        <span class="text-right mb-2"><strong>投稿日: </strong>{{ comment.created_at }}</span>
+        {% if session.logged_in %}
+        <form action="{{ url_for('delete_comment', id=entry.id, ci=comment.id) }}" method="post">
+          <button class="btn btn-danger mb-3" type="submit" name="button">コメントを削除</button>
+        </form>
+        {% endif %}
+      </div>
+    {% else %}
+    {% endif %}
+  {% else %}
+    <p class="m-3 font-weight-bold">コメントがありません</p>
+  {% endfor %}
+  <div class="card p-3 m-3">
+    <h6>コメント</h6>
+    <form action="{{ url_for('post_comment', id=entry.id) }}" method="post">
+      <div class="form-group">
+        <label for="name">名前</label>
+        <input class="rounded p-1" type="text" name="name" autocomplete="off">
+      </div>
+      <textarea class="form-control w-50 mb-2" name="comment" rows="6" autocomplete="off"></textarea>
+      <button class="btn btn-dark mx-auto" type="submit" name="button">コメントする</button>
+    </form>
+  </div>
+  {% endblock %}
+</div>
